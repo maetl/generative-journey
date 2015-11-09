@@ -1,5 +1,5 @@
 class Story
-  attr_reader :setting, :title
+  attr_reader :setting, :plot, :title
 
   def initialize(rng)
     @rng = rng
@@ -9,6 +9,7 @@ class Story
 
   def generate
     generate_setting
+    generate_plot
     generate_title
     self
   end
@@ -23,11 +24,7 @@ class Story
     @setting = Setting.generate(@rng)
   end
 
-  def generate_transport
-    [:car, :ship, :train, :motorbike, :foot].sample(random: @rng)
-  end
-
-  def generate_narrative
-    [:road_trip, :walking_the_earth, :golden_fleece].sample(random: @rng)
+  def generate_plot
+    @plot = Plot.generate(@setting, @rng)
   end
 end
