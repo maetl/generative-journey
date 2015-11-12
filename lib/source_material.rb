@@ -1,4 +1,5 @@
 require 'engtagger'
+require 'octokit'
 
 class String
   def is_upper?
@@ -30,6 +31,46 @@ class EngTagger
 end
 
 module SourceMaterial
+  class Gutenberg
+    def initialize
+      @client = Octokit::Client.new(access_token: ENV['GITHUB_ACCESS_TOKEN'])
+    end
+
+    def download_books(bookids)
+      bookids.each do |bookid|
+        id_fragment = "_#{bookid}"
+        query = "#{id_fragment} user:GITenberg"
+
+        @client.search_repos(query).items.each do |repo|
+          if repo.name.end_with?(id_fragment)
+            download_text(repo.full_name, bookid)
+            download_meta(repo.full_name, bookid)
+          end
+        end
+      end
+    end
+
+    def download_text(repo_name, bookid)
+      text = read_file(repo_name, "#{bookid}.txt")
+      write_file("source/#{bookid}.txt", text)
+    end
+
+    def download_meta(repo_name, bookid)
+      meta = read_file(repo_name, 'metadata.json')
+      write_file("meta/#{bookid}.json", meta)
+    end
+
+    def read_file(repo_name, path)
+      @client.contents(repo_name, path: path, accept: 'application/vnd.github.v3.raw')
+    end
+
+    def write_file(filepath, content)
+      File.open("data/gutenberg/#{filepath}", 'w') do |file|
+        file.puts(content)
+      end
+    end
+  end
+
   class Document
     def initialize(file)
       @tagger = EngTagger.new

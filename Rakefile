@@ -9,6 +9,13 @@ task :generate do
   puts "Plot: #{story.plot.type}"
 end
 
+namespace :download do
+  task :gutenberg do
+    library = SourceMaterial::Gutenberg.new
+    library.download_books(File.read('data/gutenberg/books.txt').split("\n"))
+  end
+end
+
 namespace :install do
   task :lexicon do
     adjectives = {}
