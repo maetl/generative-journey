@@ -9,9 +9,17 @@ task :generate do
   puts "Plot: #{story.plot.type}"
 end
 
+namespace :clean do
+  task :gutenberg do
+    Dir['data/gutenberg/source/**.txt'].each do |filepath|
+      sh "./script/guten-gutter --output-dir data/gutenberg/clean #{filepath}"
+    end
+  end
+end
+
 namespace :download do
   task :gutenberg do
-    library = SourceMaterial::Gutenberg.new
+    library = SourceMaterial::Gutenberg::Library.new
     library.download_books(File.read('data/gutenberg/books.txt').split("\n"))
   end
 end
