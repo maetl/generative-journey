@@ -78,10 +78,67 @@ module SourceMaterial
     end
   end
 
+  class Lexicon
+    attr_accessor :adverbs, :adjectives, :comparatives, :superlatives
+
+    def initialize(name, corpus)
+      @name = name
+      @corpus = corpus
+      @adjectives = {}
+      @adverbs = {}
+      @comparatives = {}
+      @superlatives = {}
+    end
+
+    def compile
+      @corpus.each do |document|
+        compile_word_list(:adverbs, document)
+        compile_word_list(:adjectives, document)
+      end
+
+      save_word_list(:adverbs)
+      save_word_list(:adjectives)
+    end
+
+    def compile_word_list(part_of_speech, document)
+      word_list = send(part_of_speech)
+
+      word_list.merge!(document.send(part_of_speech))
+
+      word_list.reject! do |k,v|
+        k.chr.is_upper? or v <= 3
+      end
+    end
+
+    def save_word_list(part_of_speech)
+      File.open("data/lexicon/#{@name.to_s}/#{part_of_speech.to_s}.txt", 'w+') do |file|
+        send(part_of_speech).keys.each do |word|
+          file.puts(word)
+        end
+      end
+    end
+  end
+
+  class Corpus
+    def initialize(path=Dir.pwd, &builder)
+      @path = path
+      @collection = []
+      builder.call(@collection) if block_given?
+    end
+
+    def each
+      return enum_for(:each) unless block_given?
+
+      @collection.each do |bookid|
+        yield Document.new(File.read("#{@path}/#{bookid}.txt"))
+      end
+    end
+  end
+
   class Document
-    def initialize(file)
+    def initialize(text)
       @tagger = EngTagger.new
-      @tagged = @tagger.add_tags(File.read(file))
+      @tagged = @tagger.add_tags(text)
     end
 
     def adjectives
