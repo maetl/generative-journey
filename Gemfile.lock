@@ -13,7 +13,7 @@ GEM
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
     birch (0.0.8)
-    calyx (0.2.0)
+    calyx (0.4.1)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     descendants_tracker (0.0.4)
