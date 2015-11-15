@@ -21,7 +21,8 @@ class Story
   end
 
   def generate_setting
-    @setting = Setting.generate(@rng)
+    @setting = Setting.new(:voyage)
+    #@setting = Setting.generate(@rng)
   end
 
   def generate_plot
