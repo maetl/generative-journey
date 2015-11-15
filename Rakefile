@@ -1,14 +1,5 @@
 Dir["lib/*.rb"].each { |path| require_relative(path) }
 
-task :generate do
-  story = Story.new(Random.new)
-  story.generate
-
-  puts story.title
-  puts "Region: #{story.setting.region}"
-  puts "Plot: #{story.plot.type}"
-end
-
 namespace :clean do
   task :gutenberg do
     Dir['data/gutenberg/source/**.txt'].each do |filepath|
@@ -27,5 +18,16 @@ end
 namespace :install do
   task :lexicon do
     SourceMaterial::Lexicon.compile(:voyage)
+  end
+end
+
+namespace :generate do
+  task :story do
+    story = Story.new(Random.new)
+    story.generate
+
+    puts story.title
+    puts "Region: #{story.setting.region}"
+    puts "Plot: #{story.plot.type}"
   end
 end
