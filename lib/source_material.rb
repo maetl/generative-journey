@@ -1,6 +1,7 @@
 require 'engtagger'
 require 'octokit'
 require 'json'
+require 'fileutils'
 
 class String
   def is_upper?
@@ -79,6 +80,17 @@ module SourceMaterial
   end
 
   class Lexicon
+    def self.compile(name)
+      FileUtils.mkdir_p("data/lexicon/#{name.to_s}")
+
+      corpus = Corpus.new('data/gutenberg/clean') do |collection|
+        collection.concat File.read("data/gutenberg/#{name.to_s}.txt").lines.map(&:strip)
+      end
+
+      lexicon = self.new(name, corpus)
+      lexicon.compile
+    end
+
     attr_accessor :adverbs, :adjectives, :comparatives, :superlatives
 
     def initialize(name, corpus)
@@ -94,20 +106,20 @@ module SourceMaterial
       @corpus.each do |document|
         compile_word_list(:adverbs, document)
         compile_word_list(:adjectives, document)
+        compile_word_list(:comparatives, document)
+        compile_word_list(:superlatives, document)
       end
-
-      save_word_list(:adverbs)
-      save_word_list(:adjectives)
     end
 
     def compile_word_list(part_of_speech, document)
       word_list = send(part_of_speech)
-
       word_list.merge!(document.send(part_of_speech))
 
       word_list.reject! do |k,v|
         k.chr.is_upper? or v <= 3
       end
+
+      save_word_list(part_of_speech)
     end
 
     def save_word_list(part_of_speech)

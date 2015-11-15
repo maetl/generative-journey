@@ -26,14 +26,6 @@ end
 
 namespace :install do
   task :lexicon do
-    corpus = SourceMaterial::Corpus.new('data/gutenberg/clean') do |collection|
-      collection << '3091'
-      collection << '120'
-      collection << '21085'
-      collection << '37903'
-    end
-
-    lexicon = SourceMaterial::Lexicon.new(:voyage, corpus)
-    lexicon.compile
+    SourceMaterial::Lexicon.compile(:voyage)
   end
 end
