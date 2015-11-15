@@ -3,7 +3,7 @@ class Plot
     plot_types = case setting.region
     when :america
       [:road_trip]
-    when :pacific
+    when :voyage
       [:shipwreck]
     else
       [:walking_the_earth, :seekers_quest]

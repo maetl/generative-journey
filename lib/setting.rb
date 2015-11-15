@@ -1,12 +1,9 @@
 class Setting
-  attr_reader :region
+  attr_reader :name, :lexicon, :geography
 
-  def self.generate(rng)
-    region = [:africa, :amazon, :pacific, :arctic, :america, :australia].sample(random: rng)
-    self.new(region)
-  end
-
-  def initialize(region)
-    @region = region
+  def initialize(name)
+    @name = name
+    @lexicon = Lexicon.new(name)
+    @geography = Geography.new(name)
   end
 end
