@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'wikipedia-client'
+gem 'wikicloth'
 gem 'geonames_api'
 gem 'rest-client'
 gem 'octokit'

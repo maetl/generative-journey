@@ -13,6 +13,11 @@ namespace :download do
     library = SourceMaterial::Gutenberg::Library.new
     library.download_books(File.read('data/gutenberg/books.txt').split("\n"))
   end
+
+  task :wikipedia do
+    article = SourceMaterial::Wikipedia::Article.new('Pacific_Islands')
+    article.download_links(:voyage)
+  end
 end
 
 namespace :install do

@@ -2,6 +2,7 @@ require 'engtagger'
 require 'octokit'
 require 'json'
 require 'fileutils'
+require 'wikipedia'
 
 class String
   def is_upper?
@@ -33,6 +34,33 @@ class EngTagger
 end
 
 module SourceMaterial
+  module Wikipedia
+    class Article
+      def initialize(title)
+        @title = title
+        @article = nil
+      end
+
+      def download!
+        @article = ::Wikipedia.find(@title)
+      end
+
+      def download_links(setting)
+        download! if @article.nil?
+        links = @article.content.scan(/\[\[([\w ]+)(?:\|[\w ]+)?\]\]/).flatten
+        write_file(setting, links)
+      end
+
+      def write_file(setting, links)
+        File.open("data/wikipedia/#{setting.to_s}.txt", 'w') do |file|
+          links.each do |article|
+            file.puts(article)
+          end
+        end
+      end
+    end
+  end
+
   module Gutenberg
     class Library
       def initialize

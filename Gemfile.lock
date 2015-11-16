@@ -13,6 +13,7 @@ GEM
       ice_nine (~> 0.11.0)
       thread_safe (~> 0.3, >= 0.3.1)
     birch (0.0.8)
+    builder (3.2.2)
     calyx (0.4.1)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -22,12 +23,14 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     engtagger (0.2.0)
     equalizer (0.0.11)
+    expression_parser (0.9.0)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     geonames_api (0.1.6)
       activesupport
       rubyzip
       tzinfo
+    htmlentities (4.3.4)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     i18n (0.7.0)
@@ -35,9 +38,12 @@ GEM
     inflecto (0.0.2)
     json (1.8.3)
     mime-types (1.25.1)
+    mini_portile (0.6.2)
     minitest (5.8.2)
     multipart-post (2.0.0)
     netrc (0.11.0)
+    nokogiri (1.6.6.2)
+      mini_portile (~> 0.6.0)
     octokit (4.1.1)
       sawyer (~> 0.6.0, >= 0.5.3)
     progressbar (0.21.0)
@@ -59,6 +65,8 @@ GEM
       birch
       schiphol
       yomu
+    twitter-text (1.13.0)
+      unf (~> 0.1.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     unf (0.1.4)
@@ -69,6 +77,12 @@ GEM
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
       equalizer (~> 0.0, >= 0.0.9)
+    wikicloth (0.8.3)
+      builder
+      expression_parser
+      htmlentities
+      nokogiri
+      twitter-text
     wikipedia-client (1.5.0)
     yomu (0.2.2)
       json (~> 1.8)
@@ -88,6 +102,7 @@ DEPENDENCIES
   tactful_tokenizer
   treat
   virtus
+  wikicloth
   wikipedia-client
 
 BUNDLED WITH
