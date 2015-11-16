@@ -14,9 +14,15 @@ namespace :download do
     library.download_books(File.read('data/gutenberg/books.txt').split("\n"))
   end
 
-  task :wikipedia do
+  task :wikipedia_source do
     article = SourceMaterial::Wikipedia::Article.new('Pacific_Islands')
     article.download_links(:voyage)
+  end
+
+  task :voyage do
+    File.read('data/wikipedia/voyage.txt').lines.map(&:strip).each do |line|
+      article = SourceMaterial::Wikipedia::Article.new(line)
+    end
   end
 end
 

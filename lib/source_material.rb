@@ -51,6 +51,11 @@ module SourceMaterial
         write_file(setting, links)
       end
 
+      def download_content(setting)
+        download! if @article.nil?
+        write_file("source/#{@title.to_s.gsub(' ', '_')}.txt", @article.sanitized_content)
+      end
+
       def write_file(setting, links)
         File.open("data/wikipedia/#{setting.to_s}.txt", 'w') do |file|
           links.each do |article|
