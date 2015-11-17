@@ -22,6 +22,7 @@ namespace :download do
   task :voyage do
     File.read('data/wikipedia/voyage.txt').lines.map(&:strip).each do |line|
       article = SourceMaterial::Wikipedia::Article.new(line)
+      article.download_content
     end
   end
 end

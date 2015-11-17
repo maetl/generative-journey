@@ -43,24 +43,23 @@ module SourceMaterial
 
       def download!
         @article = ::Wikipedia.find(@title)
+        raise 'Page not found' if @article.page['missing']
       end
 
       def download_links(setting)
         download! if @article.nil?
         links = @article.content.scan(/\[\[([\w ]+)(?:\|[\w ]+)?\]\]/).flatten
-        write_file(setting, links)
+        write_file(setting, links.join("\n"))
       end
 
-      def download_content(setting)
+      def download_content
         download! if @article.nil?
-        write_file("source/#{@title.to_s.gsub(' ', '_')}.txt", @article.sanitized_content)
+        write_file("source/#{@title.to_s.gsub(' ', '_')}", @article.sanitized_content)
       end
 
-      def write_file(setting, links)
+      def write_file(setting, content)
         File.open("data/wikipedia/#{setting.to_s}.txt", 'w') do |file|
-          links.each do |article|
-            file.puts(article)
-          end
+          file.puts(content)
         end
       end
     end
