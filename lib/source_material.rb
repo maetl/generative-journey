@@ -1,37 +1,7 @@
-require 'engtagger'
 require 'octokit'
 require 'json'
 require 'fileutils'
 require 'wikipedia'
-
-class String
-  def is_upper?
-    not self.match /[[:lower:]]/
-  end
-
-  def is_lower?
-    not self.match /[[:upper:]]/
-  end
-end
-
-class EngTagger
-  RB = get_ext('rb')
-
-  def get_adverbs(tagged)
-    return nil unless valid_text(tagged)
-    RB
-    trimmed = tagged.scan(RB).map do |n|
-      strip_tags(n)
-    end
-    ret = Hash.new(0)
-    trimmed.each do |n|
-      n = stem(n)
-      next unless n.length < 100  # sanity check on word length
-      ret[n] += 1 unless n =~ /\A\s*\z/
-    end
-    return ret
-  end
-end
 
 module SourceMaterial
   module Wikipedia
@@ -123,7 +93,7 @@ module SourceMaterial
       lexicon.compile
     end
 
-    attr_accessor :adverbs, :adjectives, :comparatives, :superlatives
+    attr_accessor :adverbs, :adjectives, :comparatives, :superlatives, :nouns
 
     def initialize(name, corpus)
       @name = name
@@ -132,6 +102,7 @@ module SourceMaterial
       @adverbs = {}
       @comparatives = {}
       @superlatives = {}
+      @nouns = {}
     end
 
     def compile
@@ -140,6 +111,7 @@ module SourceMaterial
         compile_word_list(:adjectives, document)
         compile_word_list(:comparatives, document)
         compile_word_list(:superlatives, document)
+        compile_word_list(:nouns, document)
       end
     end
 
@@ -199,6 +171,10 @@ module SourceMaterial
 
     def adverbs
       @tagger.get_adverbs(@tagged)
+    end
+
+    def nouns
+      @tagger.get_nouns(@tagged)
     end
   end
 end
