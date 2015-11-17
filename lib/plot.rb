@@ -1,6 +1,6 @@
 class Plot
   def self.generate(setting, rng)
-    plot_types = case setting.region
+    plot_types = case setting.name
     when :america
       [:road_trip]
     when :voyage

@@ -39,7 +39,7 @@ namespace :generate do
     story.generate
 
     puts story.title
-    puts "Region: #{story.setting.region}"
+    puts "Geography: #{story.setting.geography}"
     puts "Plot: #{story.plot.type}"
   end
 end

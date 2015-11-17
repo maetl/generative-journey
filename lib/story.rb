@@ -17,7 +17,7 @@ class Story
   private
 
   def generate_title
-    @title = Title.generate(@setting.region, @rng)
+    @title = Title.generate(Region.new, @rng)
   end
 
   def generate_setting
